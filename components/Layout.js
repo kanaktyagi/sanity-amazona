@@ -37,6 +37,7 @@ function Layout({title,description,children}) {
       <title>{title ? `${title} - Sanity Amazona`: 'Sanity Amazona'}</title>
       {description && <meta name='description' content={description}></meta>}
       </Head>
+      
       <CssBaseline />
       <AppBar position="static" sx={classes.appbar}>
       <Toolbar sx={classes.toolbar}>
@@ -47,7 +48,7 @@ function Layout({title,description,children}) {
         </NextLink>
       </Toolbar>
       </AppBar>
-       <ThemeProvider theme={theme}>
+   
      
       <Container component="main" sx={classes.main}>
       {children}
@@ -55,7 +56,7 @@ function Layout({title,description,children}) {
       <Box component="footer" sx={classes.footer}>
       <Typography>All rights reserved. Sanity Amazona</Typography>
       </Box>
-       </ThemeProvider>
+    
       </>
   )
 }
