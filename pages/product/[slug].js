@@ -9,9 +9,11 @@ import { urlFor, urlForThumbnail } from '../../utils/image'
 import { Store } from '../../utils/Store'
 import { useSnackbar } from 'notistack'
 import axios from 'axios'
+import {useRouter} from 'next/router'
 
 
 function ProductScreen(props) {
+    const router = useRouter();
     const {slug} = props
     const {state: {cart}, dispatch} = useContext(Store)
     const [state,setState] = useState({
@@ -60,6 +62,7 @@ function ProductScreen(props) {
             quantity,
         }})
         enqueueSnackbar(`${product.name} added to the cart`, {variant:'success'})
+        router.push('/cart')
     }
  return(
      <Layout title={product?.title}>

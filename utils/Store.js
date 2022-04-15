@@ -8,7 +8,8 @@ const intialState = {
     cart: {
         cartItems: Cookies.get('cartItem') ? 
         JSON.parse(Cookies.get('cartItem')):
-        []
+        [],
+        
     }
 }
 
@@ -28,7 +29,14 @@ function reducer(state,action) {
             const cartItems = existItem ? state.cart.cartItems.map(item => item._key === existItem.key ? newItem : item)
             : [...state.cart.cartItems, newItem]
             Cookies.set('cartItems', JSON.stringify(cartItems))
-            return{...state, cart: {cartItems}}
+            return{...state, cart: {...state.cart,cartItems}}
+        }
+        case 'CART_REMOVE_ITEM': {
+                const cartItems = state.cart.cartItems.filter(
+                    item => item._key !== action.payload._key
+                )
+                Cookies.set('cartItems', JSON.stringify(cartItems))
+                return{ ...state, cart: {...state.cart, cartItems}}
         }
         default: 
         return state
