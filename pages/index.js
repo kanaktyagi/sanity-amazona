@@ -1,10 +1,15 @@
 
 import { Alert, CircularProgress, Grid } from '@mui/material';
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import ProductItem from '../components/ProductItems';
 import client from '../utils/client';
+import { urlForThumbnail } from '../utils/image';
+import { Store } from '../utils/Store';
+import { useSnackbar } from 'notistack'
+
 
 
 export default function Home() {
@@ -14,8 +19,10 @@ export default function Home() {
     error: '',
     loading: true,
   });
+  const router = useRouter();
+  const{ state: {cart}, dispatch} = useContext(Store)
   const { loading, error, products } = state;
-
+  const {enqueueSnackbar} = useSnackbar();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,8 +35,30 @@ export default function Home() {
     fetchData();
   }, []);
 
-  
-
+  const addToCartHandler = async(product) => {
+    console.log("product_id",product._id )
+    const existItem = cart.cartItems.find(x=> x._id=== product._id) 
+    const quantity = existItem ? existItem.quantity +1: 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    console.log("here", data)
+    if(data.countInStock < quantity) {
+        enqueueSnackbar('Sorry,Product is out of stock', {
+            variant: 'error'
+        })
+        return
+    }
+    dispatch({type: 'CART_ADD_ITEM', payload: {
+        _key: product.id,
+        name: product.name,
+        countInStock: product.countInStock,
+        slug:product.slug.current,
+        price: product.price,
+        image: urlForThumbnail(product.image),
+        quantity,
+    }})
+    enqueueSnackbar(`${product.name} added to the cart`, {variant:'success'})
+    router.push('/cart')
+}
   return (
     <Layout>
       {loading ? (
@@ -41,6 +70,7 @@ export default function Home() {
           {products.map((product) => (
             <Grid item md={4} key={product.slug}>
               <ProductItem
+              addToCartHandler={addToCartHandler}
                 product={product}
               ></ProductItem>
             </Grid>

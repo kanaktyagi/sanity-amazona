@@ -12,7 +12,7 @@ import NextLink from 'next/link';
 import React from 'react';
 import { urlForThumbnail } from '../utils/image';
 
-export default function ProductItem({ product }) {
+export default function ProductItem({ product, addToCartHandler }) {
     console.log("product", product)
     
   return (
@@ -33,8 +33,8 @@ export default function ProductItem({ product }) {
       </NextLink>
       <CardActions>
         <Typography>${product?.price}</Typography>
-        <Button
-        >
+        <Button size="small" color="primary" onClick={() => addToCartHandler(product)}
+         >
           Add to cart
         </Button>
       </CardActions>

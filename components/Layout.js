@@ -1,5 +1,5 @@
 
-import { AppBar,ThemeProvider, Toolbar,Box,Typography,Link,Container, Switch } from '@mui/material'
+import { AppBar,ThemeProvider, Toolbar,Box,Typography,Link,Container, Switch, Badge } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
 import Head from 'next/head'
 import React, { useContext } from 'react'
@@ -9,9 +9,10 @@ import classes from '../utils/classes'
 import { Store } from '../utils/Store'
 import jsCookie from 'js-cookie'
 
+
 function Layout({title,description,children}) {
     const {state,dispatch} = useContext(Store)
-    const {darkMode} = state
+    const {darkMode, cart} = state
     const theme = createTheme({
         components: {
           MuiLink: {
@@ -68,6 +69,13 @@ function Layout({title,description,children}) {
         </Box>
         <Box>
         <Switch checked={darkMode} onChange={darkModeChangeHandler}></Switch>
+        <NextLink href="cart" passHref> 
+        <Typography component="span" >
+        {cart.cartItems.length> 0 ? <Badge color="secondary" badgeContent={cart.cartItems.length}>
+       <span  style={{color: "white"}}>Cart</span>
+        </Badge> : <span style={{color: "white"}}> Cart</span>}
+        </Typography>
+        </NextLink>
         </Box>
       </Toolbar>
       </AppBar>
