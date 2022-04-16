@@ -33,6 +33,7 @@ function CartScreen() {
           countInStock: item.countInStock,
           slug: item.slug,
           price: item.price,
+          image: item.image,
           quantity
         }
       })
